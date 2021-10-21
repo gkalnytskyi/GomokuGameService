@@ -1,0 +1,14 @@
+# General Design Ideas
+
+Service allows to play a game of Gomoku.
+1. Service can contain only one Gomoku game at a time.
+2. Game state is stored in memory.
+3. User calls a service to start a new game. Calling new game when another one is active
+   resets all progress.
+4. Service controls which player goes. If the wrong player goes, error is returned,
+   but state of the game doesn't change.
+5. Game ends when either there is a row of 5 adjacent same color "stones" on the horizontal,
+   vertical, or diagonal line, or if there is no empty board cell to place a stone.
+6. Black go first.
+7. Winner is the one who put a row of 5 adjacent same color "stones" first. If the last
+   stone is placed, but there are no 5 "stone" rows where created it is a draw.
