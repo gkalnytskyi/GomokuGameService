@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="BusinessLayer\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
 

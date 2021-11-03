@@ -1,4 +1,4 @@
-﻿namespace GomokuGameService.BusinessLayer
+namespace GomokuGame
 {
     public enum Player
     {

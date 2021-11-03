@@ -1,9 +1,9 @@
-﻿namespace GomokuGameService.BusinessLayer
+namespace GomokuGame
 {
     public enum CellState
     {
-        Black,
         Unoccupied,
+        Black,
         White
     }
 }
