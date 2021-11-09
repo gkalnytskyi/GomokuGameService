@@ -2,7 +2,7 @@ namespace GomokuGame
 {
     public enum CellState
     {
-        Unoccupied,
+        Empty,
         Black,
         White
     }

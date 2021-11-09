@@ -2,26 +2,26 @@ namespace GomokuGame
 {
     public struct CellCoordinates
     {
-        public CellCoordinates(int i, int j)
+        public CellCoordinates(int row, int column)
         {
-            I = i;
-            J = j;
+            Row = row;
+            Column = column;
         }
         
-        public readonly int I;
-        public readonly int J;
+        public readonly int Row;
+        public readonly int Column;
 
         public CellCoordinates WithOffset(int di, int dj)
         {
-            int newI = I + di;
-            int newJ = J + dj;
+            int newI = Row + di;
+            int newJ = Column + dj;
 
             return new CellCoordinates(newI, newJ);
         }
 
         public override string ToString()
         {
-            return $"({I}, {J})";
+            return $"({Row}, {Column})";
         }
     }
 }

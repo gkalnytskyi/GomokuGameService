@@ -2,47 +2,95 @@ using System;
 
 namespace GomokuGame
 {
-    public class GomokuGame
+    public interface IGame
     {
-        private GomokuBoard Board;
-        public Player NextPlayer { get; private set; }
+        void PlaceStone(CellCoordinates cell);
+        bool HasGameEnded { get; }
+    }
+    
+    public class GomokuGame : IGame
+    {
+        public GomokuBoard Board { get; private set; }
+        private GomokuGameState CurrentState { get; set; }
 
-        public GomokuGame(GomokuBoard board) : this (board, Player.Black)
+        bool IGame.HasGameEnded => throw new NotImplementedException();
+
+        public GomokuGame(GomokuBoard board) : this (board, GomokuGameState.BlackToMove)
         {
         }
 
-        public GomokuGame(GomokuBoard board, Player nextPlayer)
+        public GomokuGame(GomokuBoard board, GomokuGameState state)
         {
             Board = board ?? throw new ArgumentNullException(nameof(board));
-            NextPlayer = nextPlayer;
+            CurrentState = state;
         }
 
-        public void NextMove(CellCoordinates cell)
+        public bool HasGameEnded()
         {
-            try
+            return CurrentState switch
             {
-                Board.PlaceStone(NextPlayer, cell);
-                bool isAWin = Board.IsPartOfWinningSequence(cell);
-                // How to signal that game is still on, who have won, and
-                
-                switch (NextPlayer)
-                {
-                    case Player.Black:
-                        NextPlayer = Player.White;
-                        break;
-                    case Player.White:
-                        NextPlayer = Player.Black;
-                        break;
-                    default:
-                        throw new ArgumentException("Unknown player type: " + NextPlayer.ToString());
-                }
-            }
-            catch (GomokuGameException gex)
-            {
-            }
-            catch (Exception ex)
-            {
+                GomokuGameState.BlackWins or GomokuGameState.WhiteWins or GomokuGameState.Draw => true,
+                _ => false,
+            };
+        }
 
+        public void PlaceStone(CellCoordinates cell)
+        {
+            if (HasGameEnded())
+            {
+                throw new GomokuGameException("Game has ended");
+            }
+            
+            if (!Board.IsOnTheBoard(cell))
+            {
+                throw new GomokuGameException(
+                    $"Cell with these coordinates ({cell.Row}, {cell.Column}) does not exist on the board");
+            }
+
+            if (!Board.CanPlaceStone(cell))
+            {
+                throw new GomokuGameException($"This cell ({cell.Row}, {cell.Column}) is occupied");
+            }
+
+            var player = CurrentState switch
+            {
+                GomokuGameState.BlackToMove => Player.Black,
+                GomokuGameState.WhiteToMove => Player.White,
+                _ => throw new GomokuGameException("Game has ended"),
+            };
+            Board.PlaceStone(player, cell);
+            var isAWinningMove = Board.IsPartOfWinningSequence(cell);
+            var moreMovesAvailable = Board.AreMoreMovesAvailable();
+
+            CurrentState = Transition(CurrentState, isAWinningMove, moreMovesAvailable);
+        }
+
+        private static GomokuGameState Transition(GomokuGameState current, bool wasAWinningMove, bool anyMoreMoves)
+        {
+            if (wasAWinningMove)
+            {
+                return current switch
+                {
+                    GomokuGameState.BlackToMove => GomokuGameState.BlackWins,
+                    GomokuGameState.WhiteToMove => GomokuGameState.WhiteWins,
+                    _ => current,
+                };
+            }
+            else if (anyMoreMoves)
+            {
+                return current switch
+                {
+                    GomokuGameState.BlackToMove => GomokuGameState.WhiteToMove,
+                    GomokuGameState.WhiteToMove => GomokuGameState.BlackToMove,
+                    _ => current,
+                };
+            } else
+            {
+                return current switch
+                {
+                    GomokuGameState.BlackToMove or GomokuGameState.WhiteToMove => GomokuGameState.Draw,
+                    _ => current
+                };
             }
         }
     }

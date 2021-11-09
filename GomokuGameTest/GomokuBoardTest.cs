@@ -13,8 +13,8 @@ namespace GomokuGameTest
         public void CheckStringRepresentation()
         {
             var board =
-                Enumerable.Repeat(CellState.Black, 1).Append(CellState.Unoccupied).Concat(Enumerable.Repeat(CellState.White, 2)).
-                Concat(Enumerable.Repeat(CellState.Black, 3)).Append(CellState.Unoccupied).
+                Enumerable.Repeat(CellState.Black, 1).Append(CellState.Empty).Concat(Enumerable.Repeat(CellState.White, 2)).
+                Concat(Enumerable.Repeat(CellState.Black, 3)).Append(CellState.Empty).
                 Concat(Enumerable.Repeat(CellState.White, 4)).
                 Append(CellState.White).Concat(Enumerable.Repeat(CellState.Black, 3)).ToArray();
 
@@ -54,12 +54,12 @@ namespace GomokuGameTest
         public void CheckHorizontalWinningPositions(CellState color, CellCoordinates coords)
         {
             var board =
-                Enumerable.Repeat(color, 4).Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 6)).
-                Append(CellState.Unoccupied).Concat(Enumerable.Repeat(color, 4)).Append(CellState.Unoccupied).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 6)).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 6)).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).Concat(Enumerable.Repeat(color, 4)).ToArray();
+                Enumerable.Repeat(color, 4).Concat(Enumerable.Repeat(CellState.Empty, 2)).
+                Concat(Enumerable.Repeat(CellState.Empty, 6)).
+                Append(CellState.Empty).Concat(Enumerable.Repeat(color, 4)).Append(CellState.Empty).
+                Concat(Enumerable.Repeat(CellState.Empty, 6)).
+                Concat(Enumerable.Repeat(CellState.Empty, 6)).
+                Concat(Enumerable.Repeat(CellState.Empty, 2)).Concat(Enumerable.Repeat(color, 4)).ToArray();
 
             var gomokuBoard = new GomokuBoard(6, 6, 4, board);
 
@@ -92,12 +92,12 @@ namespace GomokuGameTest
         public void CheckVerticalWinningPositions(CellState color, CellCoordinates coords)
         {
             var board =
-                Enumerable.Repeat(color, 1).Concat(Enumerable.Repeat(CellState.Unoccupied, 5)).
-                Append(color).Append(CellState.Unoccupied).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 3)).
-                Append(color).Append(CellState.Unoccupied).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).Append(color).
-                Append(color).Append(CellState.Unoccupied).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).Append(color).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).Append(color).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 5)).Append(color).ToArray();
+                Enumerable.Repeat(color, 1).Concat(Enumerable.Repeat(CellState.Empty, 5)).
+                Append(color).Append(CellState.Empty).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 3)).
+                Append(color).Append(CellState.Empty).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 2)).Append(color).
+                Append(color).Append(CellState.Empty).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 2)).Append(color).
+                Concat(Enumerable.Repeat(CellState.Empty, 2)).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 2)).Append(color).
+                Concat(Enumerable.Repeat(CellState.Empty, 5)).Append(color).ToArray();
 
             var gomokuBoard = new GomokuBoard(6, 6, 4, board);
 
@@ -132,12 +132,12 @@ namespace GomokuGameTest
         public void CheckPrimeDiagonalWinningPositions(CellState color, CellCoordinates coords)
         {
             var board =
-                Enumerable.Repeat(color, 1).Append(CellState.Unoccupied).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 3)).
-                Append(CellState.Unoccupied).Append(color).Append(CellState.Unoccupied).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).Append(color).Append(CellState.Unoccupied).Append(color).Append(CellState.Unoccupied).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 3)).Append(color).Append(CellState.Unoccupied).Append(color).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 4)).Append(color).Append(CellState.Unoccupied).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 5)).Append(color).ToArray();
+                Enumerable.Repeat(color, 1).Append(CellState.Empty).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 3)).
+                Append(CellState.Empty).Append(color).Append(CellState.Empty).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 2)).
+                Concat(Enumerable.Repeat(CellState.Empty, 2)).Append(color).Append(CellState.Empty).Append(color).Append(CellState.Empty).
+                Concat(Enumerable.Repeat(CellState.Empty, 3)).Append(color).Append(CellState.Empty).Append(color).
+                Concat(Enumerable.Repeat(CellState.Empty, 4)).Append(color).Append(CellState.Empty).
+                Concat(Enumerable.Repeat(CellState.Empty, 5)).Append(color).ToArray();
 
             var gomokuBoard = new GomokuBoard(6, 6, 4, board);
 
@@ -173,12 +173,12 @@ namespace GomokuGameTest
         public void CheckSecondaryDiagonalWinningPositions(CellState color, CellCoordinates coords)
         {
             var board =
-                Enumerable.Repeat(CellState.Unoccupied, 3).Append(color).Append(CellState.Unoccupied).Append(color).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).Append(color).Append(CellState.Unoccupied).Append(color).Append(CellState.Unoccupied).
-                Append(CellState.Unoccupied).Append(color).Append(CellState.Unoccupied).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 2)).
-                Append(color).Append(CellState.Unoccupied).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 3)).
-                Append(CellState.Unoccupied).Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 4)).
-                Append(color).Concat(Enumerable.Repeat(CellState.Unoccupied, 5)).ToArray();
+                Enumerable.Repeat(CellState.Empty, 3).Append(color).Append(CellState.Empty).Append(color).
+                Concat(Enumerable.Repeat(CellState.Empty, 2)).Append(color).Append(CellState.Empty).Append(color).Append(CellState.Empty).
+                Append(CellState.Empty).Append(color).Append(CellState.Empty).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 2)).
+                Append(color).Append(CellState.Empty).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 3)).
+                Append(CellState.Empty).Append(color).Concat(Enumerable.Repeat(CellState.Empty, 4)).
+                Append(color).Concat(Enumerable.Repeat(CellState.Empty, 5)).ToArray();
 
             var gomokuBoard = new GomokuBoard(6, 6, 4, board);
 
@@ -243,9 +243,9 @@ namespace GomokuGameTest
         [TestCaseSource(nameof(OccupiedCellCases))]
         public void PlacingStoneInOccupiedCellThrowsException(Player player, CellCoordinates cell)
         {
-            var board = Enumerable.Repeat(CellState.Unoccupied, 4).
-                Append(CellState.Unoccupied).Append(CellState.Black).Append(CellState.White).Append(CellState.Unoccupied).
-                Concat(Enumerable.Repeat(CellState.Unoccupied, 8)).ToArray();
+            var board = Enumerable.Repeat(CellState.Empty, 4).
+                Append(CellState.Empty).Append(CellState.Black).Append(CellState.White).Append(CellState.Empty).
+                Concat(Enumerable.Repeat(CellState.Empty, 8)).ToArray();
 
             var gomokuBoard = new GomokuBoard(4, 4, 2, board);
 

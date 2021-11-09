@@ -80,7 +80,7 @@ namespace GomokuGame
                         case CellState.White:
                             sb.Append('O');
                             break;
-                        case CellState.Unoccupied:
+                        case CellState.Empty:
                             sb.Append('_');
                             break;
                         default:
@@ -97,7 +97,23 @@ namespace GomokuGame
         public void Reset()
         {
             EmptyCells = BoardSize;
-            Array.Fill(Board, CellState.Unoccupied);
+            Array.Fill(Board, CellState.Empty);
+        }
+
+        public bool IsOnTheBoard(CellCoordinates cell)
+        {
+            return (cell.Row >= 0 && cell.Row < BoardRows) &&
+                (cell.Column >= 0 && cell.Row < BoardColumns);
+        }
+
+        public bool CanPlaceStone(CellCoordinates cell)
+        {
+            return this[cell] == CellState.Empty;
+        }
+
+        public bool AreMoreMovesAvailable()
+        {
+            return EmptyCells > 0;
         }
 
         public void PlaceStone(Player player, CellCoordinates cell)
@@ -112,7 +128,7 @@ namespace GomokuGame
                 throw new GomokuGameException("Cell coordinates are off the board.");
             }
 
-            if (this[cell] != CellState.Unoccupied)
+            if (!CanPlaceStone(cell))
             {
                 throw new GomokuGameException("Cannot place a stone to and occupied cell.");
             }
@@ -147,13 +163,7 @@ namespace GomokuGame
                 throw new GomokuGameException("Cell coordinates are off the board.");
             }
             
-            return cell.I * BoardColumns + cell.J;
-        }
-
-        private bool IsOnTheBoard(CellCoordinates cell)
-        {
-            return (cell.I >= 0 && cell.I < BoardRows) &&
-                (cell.J >= 0 && cell.I < BoardColumns);
+            return cell.Row * BoardColumns + cell.Column;
         }
 
         private bool CheckHorizontal(CellCoordinates cell)
@@ -254,7 +264,7 @@ namespace GomokuGame
                         case CellState.White:
                             sum += -1;
                             break;
-                        case CellState.Unoccupied:
+                        case CellState.Empty:
                             break;
                         default:
                             break;
@@ -271,21 +281,21 @@ namespace GomokuGame
         }
 
         private CellCoordinates RelativeLeftMost(CellCoordinates cell) =>
-            new(cell.I, Math.Max(0, cell.J - WinCount + 1));
+            new(cell.Row, Math.Max(0, cell.Column - WinCount + 1));
 
         private CellCoordinates RelativeRightMost(CellCoordinates cell) =>
-            new(cell.I, Math.Min(cell.J + WinCount - 1, BoardColumns - 1));
+            new(cell.Row, Math.Min(cell.Column + WinCount - 1, BoardColumns - 1));
 
         private CellCoordinates RelativeTopMost(CellCoordinates cell) =>
-            new(Math.Max(0, cell.I - WinCount + 1), cell.J);
+            new(Math.Max(0, cell.Row - WinCount + 1), cell.Column);
 
         private CellCoordinates RelativeBottomMost(CellCoordinates cell) =>
-            new(Math.Min(cell.I + WinCount - 1, BoardRows - 1), cell.J);
+            new(Math.Min(cell.Row + WinCount - 1, BoardRows - 1), cell.Column);
 
         private static int CellDistance(CellCoordinates cellA, CellCoordinates cellB)
         {
-            int di = Math.Abs(cellA.I - cellB.I);
-            int dj = Math.Abs(cellA.J - cellB.J);
+            int di = Math.Abs(cellA.Row - cellB.Row);
+            int dj = Math.Abs(cellA.Column - cellB.Column);
 
             if (di == 0)
             {
@@ -317,7 +327,7 @@ namespace GomokuGame
 
             for (var i = 0; i < board.Length; i++)
             {
-                if (board[i] == CellState.Unoccupied)
+                if (board[i] == CellState.Empty)
                 {
                     uCells++;
                 }
