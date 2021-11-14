@@ -8,15 +8,15 @@ namespace GomokuGame
             Column = column;
         }
         
-        public readonly int Row;
-        public readonly int Column;
+        public readonly int Row { get; init; }
+        public readonly int Column { get; init; }
 
         public CellCoordinates WithOffset(int di, int dj)
         {
-            int newI = Row + di;
-            int newJ = Column + dj;
+            int newRow = Row + di;
+            int newCol = Column + dj;
 
-            return new CellCoordinates(newI, newJ);
+            return new CellCoordinates(newRow, newCol);
         }
 
         public override string ToString()

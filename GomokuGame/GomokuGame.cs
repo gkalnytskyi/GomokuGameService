@@ -11,9 +11,7 @@ namespace GomokuGame
     public class GomokuGame : IGame
     {
         public GomokuBoard Board { get; private set; }
-        private GomokuGameState CurrentState { get; set; }
-
-        bool IGame.HasGameEnded => throw new NotImplementedException();
+        public GomokuGameState CurrentState { get; private set; }
 
         public GomokuGame(GomokuBoard board) : this (board, GomokuGameState.BlackToMove)
         {
@@ -25,18 +23,29 @@ namespace GomokuGame
             CurrentState = state;
         }
 
-        public bool HasGameEnded()
+        public bool HasGameEnded
         {
-            return CurrentState switch
+            get
             {
-                GomokuGameState.BlackWins or GomokuGameState.WhiteWins or GomokuGameState.Draw => true,
-                _ => false,
-            };
+                return CurrentState switch
+                {
+                    GomokuGameState.BlackWins or
+                    GomokuGameState.WhiteWins or
+                    GomokuGameState.Draw => true,
+                    _ => false,
+                };
+            }
+        }
+
+        public void Restart()
+        {
+            Board.Reset();
+            CurrentState = GomokuGameState.BlackToMove;
         }
 
         public void PlaceStone(CellCoordinates cell)
         {
-            if (HasGameEnded())
+            if (HasGameEnded)
             {
                 throw new GomokuGameException("Game has ended");
             }

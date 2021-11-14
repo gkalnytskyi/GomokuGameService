@@ -9,8 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BusinessLayer\" />
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\GomokuGame\GomokuGame.csproj" />
   </ItemGroup>
 
 </Project>

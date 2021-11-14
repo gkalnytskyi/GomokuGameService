@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,12 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using GomokuGame;
 
-namespace GomokuGameService
+namespace GomokuGameApi
 {
     public class Startup
     {
@@ -26,11 +27,13 @@ namespace GomokuGameService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+
+            services.AddSingleton(new GomokuGame.GomokuGame(new GomokuBoard(15, 15, 5)));
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "GomokuGameService", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "GomokuGameApi", Version = "v1" });
             });
         }
 
@@ -41,7 +44,7 @@ namespace GomokuGameService
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GomokuGameService v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GomokuGameApi v1"));
             }
 
             app.UseHttpsRedirection();

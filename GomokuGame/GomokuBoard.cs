@@ -16,7 +16,19 @@ namespace GomokuGame
         private readonly CellState[] Board;
         private int EmptyCells;
 
-        public GomokuBoard(int nrow, int ncol, int winCount, CellState[] boardState = null)
+
+        /// <summary>
+        /// Creates a new board for a game of Gomoku with <paramref name="nrow"/> rows and <paramref name="ncol"/> columns,
+        /// with winning sequence length of <paramref name="winCount"/>.
+        /// Caller can provide initial state of cells in <paramref name="initBoardState"/>.
+        /// </summary>
+        /// <param name="nrow">Number of rows on the board.</param>
+        /// <param name="ncol">Number of columns on the board.</param>
+        /// <param name="winCount">Number of stones of the same colour treated as winning sequence.</param>
+        /// <param name="initBoardState">Initial state of cells on the board. Should be the same length as nrow * ncol.</param>
+        /// <remarks>If Parameter <paramref name="initBoardState"/> is not passed the new blank array
+        /// of size nrow * ncol is created.</remarks>
+        public GomokuBoard(int nrow, int ncol, int winCount, CellState[] initBoardState = null)
         {
             if (ncol < 1)
             {
@@ -30,7 +42,7 @@ namespace GomokuGame
 
             if (winCount < 2)
             {
-                throw new ArgumentException("Winning row length should be more than 2 stones", nameof(winCount));
+                throw new ArgumentException("Winning row length should be at least 2 stones", nameof(winCount));
             }
             else if (winCount > ncol || winCount > nrow)
             {
@@ -39,21 +51,21 @@ namespace GomokuGame
                     nameof(winCount));
             }
 
-            if (boardState == null)
-            {
-                boardState = new CellState[ncol * nrow];
-            }
-
-            if (boardState.Length != ncol * nrow)
+            if ((initBoardState != null) && (initBoardState.Length != ncol * nrow))
             {
                 throw new ArgumentException(
-                    $"Provided board does not match expected {ncol} by {nrow} board.", nameof(boardState));
+                    $"Provided board does not match expected {ncol} by {nrow} board.", nameof(initBoardState));
+            }
+
+            if (initBoardState == null)
+            {
+                initBoardState = new CellState[ncol * nrow];
             }
 
             BoardColumns = ncol;
             BoardRows = nrow;
             WinCount = winCount;
-            Board = boardState;
+            Board = initBoardState;
             EmptyCells = CountUnoccupiedCells(Board);
         }
 
@@ -94,6 +106,38 @@ namespace GomokuGame
             return sb.ToString();
         }
 
+        public string[] ToStringPerRow()
+        {
+            var strArray = new string[BoardRows];
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < BoardRows; i++)
+            {
+                sb.Clear();
+                for (int j = 0; j < BoardColumns; j++)
+                {
+                    switch (Board[(i * BoardColumns) + j])
+                    {
+                        case CellState.Black:
+                            sb.Append('X');
+                            break;
+                        case CellState.White:
+                            sb.Append('O');
+                            break;
+                        case CellState.Empty:
+                            sb.Append('_');
+                            break;
+                        default:
+                            throw new ArgumentException("Unknown cell type");
+                    }
+                }
+
+                strArray[i] = sb.ToString();
+            }
+
+            return strArray;
+        }
+
         public void Reset()
         {
             EmptyCells = BoardSize;
@@ -130,7 +174,7 @@ namespace GomokuGame
 
             if (!CanPlaceStone(cell))
             {
-                throw new GomokuGameException("Cannot place a stone to and occupied cell.");
+                throw new GomokuGameException("Cannot place a stone to an occupied cell.");
             }
 
             switch (player)
